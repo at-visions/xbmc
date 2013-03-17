@@ -3895,6 +3895,13 @@ void CDVDPlayer::UpdatePlayState(double timeout)
   if(state.time_total <= 0)
     state.canseek  = false;
 
+  state.player_state = "";
+  if(CDVDInputStreamNavigator* ptr = dynamic_cast<CDVDInputStreamNavigator*>(m_pInputStream))
+  {
+    if(!ptr->GetNavigatorState(state.player_state))
+      state.player_state = "";
+  }
+
   if (state.time_src == ETIMESOURCE_CLOCK)
     state.time_offset = m_offset_pts;
   else
