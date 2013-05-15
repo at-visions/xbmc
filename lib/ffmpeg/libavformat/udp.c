@@ -219,7 +219,7 @@ static int udp_socket_create(UDPContext *s, struct sockaddr_storage *addr,
         av_log(NULL, AV_LOG_ERROR, "socket: %s\n", strerror(errno));
     }
 
-    if (udp_fd < 0)
+    if (udp_fd < 0 || res == 0)
         goto fail;
 
     memcpy(addr, res->ai_addr, res->ai_addrlen);
