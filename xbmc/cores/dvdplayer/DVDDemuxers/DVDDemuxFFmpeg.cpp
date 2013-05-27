@@ -678,7 +678,7 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
       AVStream *st = m_pFormatContext->streams[m_AVPacket.pkt.stream_index];
       if(st->parser && st->parser->parser->split && !st->codec->extradata)
       {
-        int i= st->parser->parser->split(st->codec, m_AVPacket.pkt.data, mv_AVPacket.pkt.size);
+        int i= st->parser->parser->split(st->codec, m_AVPacket.pkt.data, m_AVPacket.pkt.size);
         if (i > 0 && i < FF_MAX_EXTRADATA_SIZE)
         {
           st->codec->extradata_size= i;
@@ -692,7 +692,7 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
             {
               AVCodec *codec;
               AVDictionary *thread_opt = NULL;
-              codec = st->codec->codec ? st->codec->codec : m_dllAvCodec.avcodec_find_decoder(st->codec->codec_id);
+              codec = (AVCodec*) st->codec->codec ? st->codec->codec : m_dllAvCodec.avcodec_find_decoder(st->codec->codec_id);
               m_dllAvUtil.av_dict_set(&thread_opt, "threads", "1", 0);
               m_dllAvCodec.avcodec_open2(st->codec, codec, &thread_opt);
 //            m_dllAvUtil.av_dict_free(&thread_opt);
