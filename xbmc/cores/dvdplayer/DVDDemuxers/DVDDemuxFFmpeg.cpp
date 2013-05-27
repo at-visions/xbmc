@@ -692,7 +692,7 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
             {
               AVCodec *codec;
               AVDictionary *thread_opt = NULL;
-              codec = (AVCodec*) st->codec->codec ? st->codec->codec : m_dllAvCodec.avcodec_find_decoder(st->codec->codec_id);
+              codec = st->codec->codec ? (AVCodec*)st->codec->codec : m_dllAvCodec.avcodec_find_decoder(st->codec->codec_id);
               m_dllAvUtil.av_dict_set(&thread_opt, "threads", "1", 0);
               m_dllAvCodec.avcodec_open2(st->codec, codec, &thread_opt);
 //            m_dllAvUtil.av_dict_free(&thread_opt);
