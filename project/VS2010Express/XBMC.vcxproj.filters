@@ -280,6 +280,36 @@
     <Filter Include="interfaces\python\test">
       <UniqueIdentifier>{0a84b5ee-2ad4-4ae2-9a8d-fc585c6d8aae}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
+=======
+    <Filter Include="view">
+      <UniqueIdentifier>{90f512bb-8cda-4f04-b938-4f48d29bc82a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="settings\dialogs">
+      <UniqueIdentifier>{38264422-e35f-427f-8d3d-27bc075b9bdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="settings\windows">
+      <UniqueIdentifier>{1a1eb956-43d1-4709-9467-ce471d54941d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="profiles">
+      <UniqueIdentifier>{e0e6a2e7-683d-442f-bbd1-bc4e0ecd140a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="profiles\dialogs">
+      <UniqueIdentifier>{e658a9f4-98f8-4403-aa85-a5ed7ec67868}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="profiles\windows">
+      <UniqueIdentifier>{b5a6d872-7e56-4976-81c5-47baad252337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input\touch">
+      <UniqueIdentifier>{4e236b17-3720-4ed8-89af-90cb86bf9b03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input\touch\generic">
+      <UniqueIdentifier>{d062c356-66f2-49e7-9510-b216701d2298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network\mdns">
+      <UniqueIdentifier>{4deb3d70-7772-42be-8884-4a550c1ff666}</UniqueIdentifier>
+    </Filter>
+>>>>>>> a90df4d... [zeroconf] - cleanup ifdefs use HAS_MDNS and HAS_MDNS_EMBEDDED (similar to what we do with HAS_AVAHI already) instead of making TARGET_blah assumptions - rename Zeroconf*WIN.* to Zeroconf*MDNS.* and move it into its own subdir mdns - its not windows specific anymore - add support for libmDnsEmbedded for allowing zeroconf support without running daemon (embedded server)
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -1990,8 +2020,8 @@
     <ClCompile Include="..\..\xbmc\utils\HttpParser.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\network\windows\ZeroconfWIN.cpp">
-      <Filter>network\windows</Filter>
+    <ClCompile Include="..\..\xbmc\network\mdns\ZeroconfMDNS.cpp">
+      <Filter>network\mdns</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\peripherals\Peripherals.cpp">
       <Filter>peripherals</Filter>
@@ -2382,8 +2412,8 @@
     <ClCompile Include="..\..\xbmc\network\ZeroconfBrowser.cpp">
       <Filter>network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\network\windows\ZeroconfBrowserWIN.cpp">
-      <Filter>network\windows</Filter>
+    <ClCompile Include="..\..\xbmc\network\mdns\ZeroconfBrowserMDNS.cpp">
+      <Filter>network\mdns</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\cores\AudioEngine\Encoders\AEEncoderFFmpeg.cpp">
       <Filter>cores\AudioEngine\Encoders</Filter>
@@ -4933,8 +4963,8 @@
     <ClInclude Include="..\..\xbmc\utils\HttpParser.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\network\windows\ZeroconfWIN.h">
-      <Filter>network\windows</Filter>
+    <ClInclude Include="..\..\xbmc\network\mdns\ZeroconfMDNS.h">
+      <Filter>network\mdns</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\network\DllLibPlist.h">
       <Filter>network</Filter>
@@ -5345,8 +5375,8 @@
     <ClInclude Include="..\..\xbmc\network\ZeroconfBrowser.h">
       <Filter>network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\network\windows\ZeroconfBrowserWIN.h">
-      <Filter>network\windows</Filter>
+    <ClInclude Include="..\..\xbmc\network\mdns\ZeroconfBrowserMDNS.h">
+      <Filter>network\mdns</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\cores\AudioEngine\Encoders\AEEncoderFFmpeg.h">
       <Filter>cores\AudioEngine\Encoders</Filter>

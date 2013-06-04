@@ -832,9 +832,14 @@
     <ClCompile Include="..\..\xbmc\network\httprequesthandler\HTTPWebinterfaceAddonsHandler.cpp" />
     <ClCompile Include="..\..\xbmc\network\httprequesthandler\HTTPWebinterfaceHandler.cpp" />
     <ClCompile Include="..\..\xbmc\network\httprequesthandler\IHTTPRequestHandler.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\..\xbmc\network\libscrobbler\lastfmscrobbler.cpp" />
     <ClCompile Include="..\..\xbmc\network\libscrobbler\librefmscrobbler.cpp" />
     <ClCompile Include="..\..\xbmc\network\libscrobbler\scrobbler.cpp" />
+=======
+    <ClCompile Include="..\..\xbmc\network\mdns\ZeroconfBrowserMDNS.cpp" />
+    <ClCompile Include="..\..\xbmc\network\mdns\ZeroconfMDNS.cpp" />
+>>>>>>> a90df4d... [zeroconf] - cleanup ifdefs use HAS_MDNS and HAS_MDNS_EMBEDDED (similar to what we do with HAS_AVAHI already) instead of making TARGET_blah assumptions - rename Zeroconf*WIN.* to Zeroconf*MDNS.* and move it into its own subdir mdns - its not windows specific anymore - add support for libmDnsEmbedded for allowing zeroconf support without running daemon (embedded server)
     <ClCompile Include="..\..\xbmc\network\Network.cpp" />
     <ClCompile Include="..\..\xbmc\network\Socket.cpp" />
     <ClCompile Include="..\..\xbmc\network\TCPServer.cpp" />
@@ -849,8 +854,6 @@
     <ClCompile Include="..\..\xbmc\network\websocket\WebSocketV13.cpp" />
     <ClCompile Include="..\..\xbmc\network\websocket\WebSocketV8.cpp" />
     <ClCompile Include="..\..\xbmc\network\windows\NetworkWin32.cpp" />
-    <ClCompile Include="..\..\xbmc\network\windows\ZeroconfBrowserWIN.cpp" />
-    <ClCompile Include="..\..\xbmc\network\windows\ZeroconfWIN.cpp" />
     <ClCompile Include="..\..\xbmc\network\Zeroconf.cpp" />
     <ClCompile Include="..\..\xbmc\network\ZeroconfBrowser.cpp" />
     <ClCompile Include="..\..\xbmc\NfoFile.cpp" />
@@ -1211,7 +1214,7 @@
     <ClInclude Include="..\..\xbmc\filesystem\ZipDirectory.h" />
     <ClInclude Include="..\..\xbmc\filesystem\ZipFile.h" />
     <ClInclude Include="..\..\xbmc\filesystem\ZipManager.h" />
-    <ClInclude Include="..\..\xbmc\network\windows\ZeroconfBrowserWIN.h" />
+    <ClInclude Include="..\..\xbmc\network\mdns\ZeroconfBrowserMDNS.h" />
     <ClInclude Include="..\..\xbmc\peripherals\devices\PeripheralImon.h" />
     <ClInclude Include="..\..\xbmc\system_gl.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug (DirectX)|Win32'">true</ExcludedFromBuild>
@@ -2236,17 +2239,20 @@
     <ClInclude Include="..\..\xbmc\network\EventServer.h" />
     <ClInclude Include="..\..\xbmc\network\GUIDialogAccessPoints.h" />
     <ClInclude Include="..\..\xbmc\network\GUIDialogNetworkSetup.h" />
+<<<<<<< HEAD
     <ClInclude Include="..\..\xbmc\network\libscrobbler\errors.h" />
     <ClInclude Include="..\..\xbmc\network\libscrobbler\lastfmscrobbler.h" />
     <ClInclude Include="..\..\xbmc\network\libscrobbler\librefmscrobbler.h" />
     <ClInclude Include="..\..\xbmc\network\libscrobbler\scrobbler.h" />
+=======
+    <ClInclude Include="..\..\xbmc\network\mdns\ZeroconfMDNS.h" />    
+>>>>>>> a90df4d... [zeroconf] - cleanup ifdefs use HAS_MDNS and HAS_MDNS_EMBEDDED (similar to what we do with HAS_AVAHI already) instead of making TARGET_blah assumptions - rename Zeroconf*WIN.* to Zeroconf*MDNS.* and move it into its own subdir mdns - its not windows specific anymore - add support for libmDnsEmbedded for allowing zeroconf support without running daemon (embedded server)
     <ClInclude Include="..\..\xbmc\network\Network.h" />
     <ClInclude Include="..\..\xbmc\network\Socket.h" />
     <ClInclude Include="..\..\xbmc\network\TCPServer.h" />
     <ClInclude Include="..\..\xbmc\network\UdpClient.h" />
     <ClInclude Include="..\..\xbmc\network\WebServer.h" />
     <ClInclude Include="..\..\xbmc\network\windows\NetworkWin32.h" />
-    <ClInclude Include="..\..\xbmc\network\windows\ZeroconfWIN.h" />
     <ClInclude Include="..\..\xbmc\network\Zeroconf.h" />
     <ClInclude Include="..\..\xbmc\network\ZeroconfBrowser.h" />
     <ClInclude Include="..\..\xbmc\NfoFile.h" />
