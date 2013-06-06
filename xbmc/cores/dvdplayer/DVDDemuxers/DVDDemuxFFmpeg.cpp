@@ -673,17 +673,17 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
     {
       AVStream *stream = m_pFormatContext->streams[m_pkt.pkt.stream_index];
 
-      AVStream *st = m_pFormatContext->streams[pkt.stream_index];
+      AVStream *st = m_pFormatContext->streams[m_pkt.pkt.stream_index];
       if(st->parser && st->parser->parser->split && !st->codec->extradata)
       {
-          int i= st->parser->parser->split(st->codec, pkt.data, pkt.size);
+          int i= st->parser->parser->split(st->codec, m_pkt.pkt.data, m_pkt.pkt.size);
           if (i > 0 && i < FF_MAX_EXTRADATA_SIZE)
           {
               st->codec->extradata_size= i;
               st->codec->extradata= (uint8_t*)m_dllAvUtil.av_malloc(st->codec->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
               if (st->codec->extradata)
               {
-                  memcpy(st->codec->extradata, pkt.data, st->codec->extradata_size);
+                  memcpy(st->codec->extradata, m_pkt.pkt.data, st->codec->extradata_size);
                   memset(st->codec->extradata + i, 0, FF_INPUT_BUFFER_PADDING_SIZE);
 
                   if (st->codec->codec_type == AVMEDIA_TYPE_VIDEO)
@@ -704,7 +704,7 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
         //              picture.sample_aspect_ratio = (AVRational){0, 1};
                       picture.format = -1;
                       m_dllAvCodec.avcodec_decode_video2(st->codec, &picture,
-                                                       &got_picture, &pkt);
+                                                       &got_picture, &m_pkt.pkt);
                       m_dllAvCodec.avcodec_close(st->codec);
                       st->parser->flags = 0;
                   }
