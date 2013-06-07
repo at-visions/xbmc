@@ -410,7 +410,7 @@ static int udp_open(URLContext *h, const char *uri, int flags)
     s->ttl = 16;
     s->buffer_size = is_output ? UDP_TX_BUF_SIZE : UDP_MAX_PKT_SIZE;
 
-    s->circular_buffer_size = 7*188*4096;
+    s->circular_buffer_size = 7*188*4096*10;
 
     p = strchr(uri, '?');
     if (p) {
