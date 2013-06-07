@@ -550,6 +550,8 @@ static int write_header(am_private_t *para, am_packet_t *pkt)
         }
         while (1) {
             write_bytes = para->m_dll->codec_write(pkt->codec, pkt->hdr->data + len, pkt->hdr->size - len);
+
+            CLog::Log(LOGDEBUG, "[write_header] write_bytes: %d, len: %d, hdr-size: %d", write_bytes, len, pkt->hdr->size);
             if (write_bytes < 0 || write_bytes > (pkt->hdr->size - len)) {
                 if (-errno != AVERROR(EAGAIN)) {
                     CLog::Log(LOGDEBUG, "ERROR:write header failed!");
