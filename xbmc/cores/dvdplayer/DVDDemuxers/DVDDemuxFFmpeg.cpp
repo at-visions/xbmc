@@ -256,7 +256,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
   m_pInput = pInput;
   strFile = m_pInput->GetFileName();
 
-  bool streaminfo = false; /* set to true if we want to look for streams before playback*/
+  bool streaminfo = true; /* set to true if we want to look for streams before playback*/
 
   if( m_pInput->GetContent().length() > 0 )
   {
