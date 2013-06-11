@@ -1585,6 +1585,7 @@ int av_find_stream_info(AVFormatContext *ic);
  *       we do not waste time getting stuff the user does not need.
  */
 int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options);
+int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **options);
 
 /**
  * Find the programs which belong to a given stream.

@@ -98,6 +98,7 @@ public:
   virtual int avformat_write_header (AVFormatContext *s, AVDictionary **options)=0;
   virtual int av_write_trailer(AVFormatContext *s)=0;
   virtual int av_write_frame  (AVFormatContext *s, AVPacket *pkt)=0;
+  virtual int avformat_find_stream_info_only_video_dont_call(AVFormatContext *ic, AVDictionary **options)=0;
 };
 
 #if (defined USE_EXTERNAL_FFMPEG) || (defined TARGET_DARWIN) 
@@ -125,6 +126,11 @@ public:
   {
     CSingleLock lock(DllAvCodec::m_critSection);
     return ::avformat_find_stream_info(ic, options);
+  }
+  virtual int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **options)
+  {
+    CSingleLock lock(DllAvCodec::m_critSection);
+    return ::avformat_find_stream_info_only_video(ic, options);
   }
   virtual int avformat_open_input(AVFormatContext **ps, const char *filename, AVInputFormat *fmt, AVDictionary **options)
   { return ::avformat_open_input(ps, filename, fmt, options); }
@@ -183,6 +189,7 @@ class DllAvFormat : public DllDynamic, DllAvFormatInterface
   DEFINE_FUNC_ALIGNED2(int, __cdecl, av_read_frame, AVFormatContext *, AVPacket *)
   DEFINE_FUNC_ALIGNED4(int, __cdecl, av_seek_frame, AVFormatContext*, int, int64_t, int)
   DEFINE_FUNC_ALIGNED2(int, __cdecl, avformat_find_stream_info_dont_call, AVFormatContext*, AVDictionary **)
+  DEFINE_FUNC_ALIGNED2(int, __cdecl, avformat_find_stream_info_only_video_dont_call, AVFormatContext*, AVDictionary **)
   DEFINE_FUNC_ALIGNED4(int, __cdecl, avformat_open_input, AVFormatContext **, const char *, AVInputFormat *, AVDictionary **)
   DEFINE_FUNC_ALIGNED2(AVInputFormat*, __cdecl, av_probe_input_format, AVProbeData*, int)
   DEFINE_FUNC_ALIGNED3(AVInputFormat*, __cdecl, av_probe_input_format2, AVProbeData*, int, int*)
@@ -220,6 +227,7 @@ class DllAvFormat : public DllDynamic, DllAvFormatInterface
     RESOLVE_METHOD(av_read_frame_flush)
     RESOLVE_METHOD(av_seek_frame)
     RESOLVE_METHOD_RENAME(avformat_find_stream_info, avformat_find_stream_info_dont_call)
+    RESOLVE_METHOD_RENAME(avformat_find_stream_info_only_video, avformat_find_stream_info_only_video_dont_call)
     RESOLVE_METHOD(avformat_open_input)
     RESOLVE_METHOD(avio_alloc_context)
     RESOLVE_METHOD(av_probe_input_format)
@@ -259,6 +267,12 @@ public:
   {
     CSingleLock lock(DllAvCodec::m_critSection);
     return avformat_find_stream_info_dont_call(ic, options);
+  }
+
+  int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **options)
+  {
+    CSingleLock lock(DllAvCodec::m_critSection);
+    return avformat_find_stream_info_only_video_dont_call(ic, options);
   }
 
   virtual bool Load()

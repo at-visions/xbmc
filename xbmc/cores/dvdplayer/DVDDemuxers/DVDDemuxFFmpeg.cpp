@@ -256,7 +256,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
   m_pInput = pInput;
   strFile = m_pInput->GetFileName();
 
-  bool streaminfo = false; /* set to true if we want to look for streams before playback*/
+  bool streaminfo = true; /* set to true if we want to look for streams before playback*/
 
   if( m_pInput->GetContent().length() > 0 )
   {
@@ -448,7 +448,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
 
 
     CLog::Log(LOGDEBUG, "%s - avformat_find_stream_info starting", __FUNCTION__);
-    int iErr = m_dllAvFormat.avformat_find_stream_info(m_pFormatContext, NULL);
+    int iErr = m_dllAvFormat.avformat_find_stream_info_only_video(m_pFormatContext, NULL);
     if (iErr < 0)
     {
       CLog::Log(LOGWARNING,"could not find codec parameters for %s", strFile.c_str());
