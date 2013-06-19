@@ -366,6 +366,7 @@ static attribute_align_arg void *frame_worker_thread(void *arg)
     AVCodec *codec = avctx->codec;
 
     while (1) {
+        av_log(avctx, AV_LOG_ERROR, "looping frame_worker_thread\n");
         int i;
         if (p->state == STATE_INPUT_READY && !fctx->die) {
             pthread_mutex_lock(&p->mutex);
@@ -401,6 +402,7 @@ static attribute_align_arg void *frame_worker_thread(void *arg)
         pthread_mutex_unlock(&p->mutex);
     }
 
+    av_log(avctx, AV_LOG_WARNING, "Exit frame_worker_thread\n");
     return NULL;
 }
 

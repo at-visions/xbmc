@@ -1373,6 +1373,7 @@ static void decode_postinit(H264Context *h, int setup_finished){
     s->current_picture_ptr->f.qscale_type = FF_QSCALE_TYPE_H264;
     s->current_picture_ptr->f.pict_type   = s->pict_type;
 
+    av_log(s->avctx, AV_LOG_WARNING, "Enter decode_postinit\n");
     if (h->next_output_pic) return;
 
     if (cur->field_poc[0]==INT_MAX || cur->field_poc[1]==INT_MAX) {
@@ -1527,6 +1528,8 @@ static void decode_postinit(H264Context *h, int setup_finished){
 
     if (setup_finished)
         ff_thread_finish_setup(s->avctx);
+    
+    av_log(s->avctx, AV_LOG_WARNING, "Leaving decode_postinit\n");
 }
 
 static av_always_inline void backup_mb_border(H264Context *h, uint8_t *src_y,
@@ -4013,12 +4016,17 @@ static int decode_nal_units(H264Context *h, const uint8_t *buf, int buf_size){
             h->nal_unit_type = hx->nal_unit_type;
             h->nal_ref_idc   = hx->nal_ref_idc;
             hx = h;
+            av_log(h->s.avctx, AV_LOG_ERROR, "decode_nal_unit again\n");
+
             goto again;
         }
     }
     }
     if(context_count)
         execute_decode_slices(h, context_count);
+
+    av_log(avctx, AV_LOG_DEBUG, "Exit decode NAL units\n");
+
     return buf_index;
 }
 
@@ -4048,6 +4056,7 @@ static int decode_frame(AVCodecContext *avctx,
     s->flags= avctx->flags;
     s->flags2= avctx->flags2;
 
+    av_log(avctx, AV_LOG_ERROR, "Enter decode_frame\n");
    /* end of stream, output what is still in the buffers */
     if (buf_size == 0) {
  out:
@@ -4130,6 +4139,8 @@ not_extra:
     ff_print_debug_info(s, pict);
 //printf("out %d\n", (int)pict->data[0]);
 
+    
+    av_log(avctx, AV_LOG_ERROR, "Leaving decode_frame\n");
     return get_consumed_bytes(s, buf_index, buf_size);
 }
 #if 0
