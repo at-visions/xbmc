@@ -2856,9 +2856,9 @@ int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **opt
         }
     }
 
-    estimate_timings(ic, old_offset);
+    //estimate_timings(ic, old_offset);
 
-    compute_chapters_end(ic);
+    //compute_chapters_end(ic);
 
 #if 0
     /* correct DTS for B-frame streams with no timestamps */
@@ -2885,6 +2885,7 @@ int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **opt
     }
 #endif
 
+ av_log(ic, AV_LOG_WARNING, "Cleaning up (av_freep)\n");
  find_stream_info_err:
     for (i=0; i < ic->nb_streams; i++) {
         if (ic->streams[i]->codec)
@@ -2893,6 +2894,7 @@ int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **opt
             continue;
         av_freep(&ic->streams[i]->info);
     }
+    av_log(ic, AV_LOG_WARNING, "Exit avformat_find_stream_info_video_only\n");
     return ret;
 }
 
