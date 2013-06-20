@@ -50,6 +50,8 @@
 #undef NDEBUG
 #include <assert.h>
 
+static int testcnt = 0;
+
 /**
  * @file
  * various utility functions for use within FFmpeg
@@ -2419,6 +2421,7 @@ static int try_decode_frame(AVStream *st, AVPacket *avpkt, AVDictionary **option
         avcodec_get_frame_defaults(&picture);
         switch(st->codec->codec_type) {
         case AVMEDIA_TYPE_VIDEO:
+            testcnt++;
             ret = avcodec_decode_video2(st->codec, &picture,
                                         &got_picture, &pkt);
             break;
@@ -2731,11 +2734,16 @@ int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **opt
            least one frame of codec data, this makes sure the codec initializes
            the channel configuration and does not only trust the values from the container.
         */
-        av_log(ic, AV_LOG_DEBUG, "try decode frame 1\n");
+        av_log(ic, AV_LOG_DEBUG, "try decode frame 1 (%d)\n", testcnt);
         try_decode_frame(st, pkt, (options && i < orig_nb_streams ) ? &options[i] : NULL);
 
         st->codec_info_nb_frames++;
         count++;
+
+        //exit after 5 frames
+        if (testcnt >= 15)
+          av_log(ic, AV_LOG_ERROR, "decoding taking too long - force exit\n");
+          break;
     }
 
     if (flush_codecs) {
@@ -2752,7 +2760,7 @@ int avformat_find_stream_info_only_video(AVFormatContext *ic, AVDictionary **opt
                 
             /* flush the decoders */
             do {
-                    av_log(ic, AV_LOG_DEBUG, "try decode frame 2\n");
+                    av_log(ic, AV_LOG_WARNING, "try decode frame 2\n");
                     err = try_decode_frame(st, &empty_pkt,
                                            (options && i < orig_nb_streams) ?
                                             &options[i] : NULL);
