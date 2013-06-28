@@ -555,6 +555,7 @@ void CGUIWindowSlideShow::Process(unsigned int currentTime, CDirtyRegionList &re
       if (m_pBackgroundLoader->IsLoading())
       {
 //        CLog::Log(LOGDEBUG, "Having to hold the current image (%s) while we load %s", m_vecSlides[m_iCurrentSlide].c_str(), m_vecSlides[m_iNextSlide].c_str());
+        CSingleLock lock(m_slideSection);
         m_Image[m_iCurrentPic].Keep();
       }
     }
