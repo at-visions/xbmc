@@ -452,12 +452,13 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
   // Fast udp/mpegts startup and channel switching.
   // Set streaminfo false and skip avformat_find_stream_info (slow)
   // as it takes 5-10 seconds, see CDVDDemuxFFmpeg::Read().
+  /*
   if (strncmp(m_pFormatContext->iformat->name, "mpegts", 6) == 0 &&
       strncmp(m_pFormatContext->filename, "udp", 3) == 0)
   {
     streaminfo = false;
   }
-
+*/
   if (streaminfo)
   {
     /* too speed up dvd switches, only analyse very short */
