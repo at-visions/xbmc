@@ -448,7 +448,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
   // we need to know if this is matroska or avi later
   m_bMatroska = strncmp(m_pFormatContext->iformat->name, "matroska", 8) == 0;	// for "matroska.webm"
   m_bAVI = strcmp(m_pFormatContext->iformat->name, "avi") == 0;
-
+/*
   // Fast udp/mpegts startup and channel switching.
   // Set streaminfo false and skip avformat_find_stream_info (slow)
   // as it takes 5-10 seconds, see CDVDDemuxFFmpeg::Read().
@@ -457,12 +457,20 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
   {
     streaminfo = false;
   }
-
+*/
   if (streaminfo)
   {
     /* too speed up dvd switches, only analyse very short */
     if(m_pInput->IsStreamType(DVDSTREAM_TYPE_DVD))
       m_pFormatContext->max_analyze_duration = 500000;
+
+    if (strncmp(m_pFormatContext->iformat->name, "mpegts", 6) == 0 &&
+        strncmp(m_pFormatContext->filename, "udp", 3) == 0)
+    {
+      m_pFormatContext->fps_probe_size = 0;
+      m_pFormatContext->probesize = 1500000;
+      m_pFormatContext->max_analyze_duration = 1500000;
+    }
 
     CLog::Log(LOGDEBUG, "%s - avformat_find_stream_info starting", __FUNCTION__);
     int iErr = m_dllAvFormat.avformat_find_stream_info(m_pFormatContext, NULL);
@@ -828,7 +836,9 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
                       //m_dllAvUtil.av_freep(&st->info);
 
                       st->parser->flags = 0;
-                      CLog::Log(LOGNOTICE, "CDVDDemuxFFmpeg::Read() rtn(%d), got_picture(%d)", rtn, got_picture);
+                      int has_codec_parameters = st->codec->width && st->codec->pix_fmt != PIX_FMT_NONE;
+
+                      CLog::Log(LOGNOTICE, "CDVDDemuxFFmpeg::Read() rtn(%d), got_picture(%d), has_codec_parameters(%d)", rtn, got_picture, has_codec_parameters);
                   }
               }
           }

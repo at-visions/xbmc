@@ -2409,6 +2409,12 @@ static int try_decode_frame(AVStream *st, AVPacket *avpkt, AVDictionary **option
         if (ret < 0)
             return ret;
     }
+    if (st->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
+        // we don't need to actually decode here
+        st->codec->skip_idct = AVDISCARD_ALL;
+        st->codec->skip_frame = AVDISCARD_ALL;
+        st->codec->skip_loop_filter = AVDISCARD_ALL;
+    }
 
     while ((pkt.size > 0 || (!pkt.data && got_picture)) &&
            ret >= 0 &&
