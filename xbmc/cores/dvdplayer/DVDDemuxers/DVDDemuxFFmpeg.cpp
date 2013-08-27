@@ -658,8 +658,8 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
     url.GetProtocolOptions(protocolOptions);
 
     CStdString pkt_size = "6580";       // default is 1472
-    CStdString fifo_size = "143360";     // default is 7*4096 (28672)
-    CStdString buffer_size = "348160";  // default is 65536
+    CStdString fifo_size = "286720";     // default is 7*4096 (28672)
+    CStdString buffer_size = "696320";  // default is 65536
     for(std::map<CStdString, CStdString>::const_iterator it = protocolOptions.begin(); it != protocolOptions.end(); ++it)
     {
       const CStdString &name = it->first;
