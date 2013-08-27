@@ -468,8 +468,8 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
         strncmp(m_pFormatContext->filename, "udp", 3) == 0)
     {
       m_pFormatContext->fps_probe_size = 0;
-      m_pFormatContext->probesize = 1500000;
-      m_pFormatContext->max_analyze_duration = 1500000;
+      m_pFormatContext->probesize = 2500000;
+      m_pFormatContext->max_analyze_duration = 2500000;
     }
 
     CLog::Log(LOGDEBUG, "%s - avformat_find_stream_info starting", __FUNCTION__);
