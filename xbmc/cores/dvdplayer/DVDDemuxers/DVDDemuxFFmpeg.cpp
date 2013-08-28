@@ -280,8 +280,8 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput)
   m_pFormatContext  = m_dllAvFormat.avformat_alloc_context();
   m_pFormatContext->interrupt_callback = int_cb;
 
-  // try to abort after 30 seconds
-  m_timeout.Set(30000);
+  // try to abort after 8 seconds
+  m_timeout.Set(8000);
 
   if( m_pInput->IsStreamType(DVDSTREAM_TYPE_FFMPEG) )
   {
