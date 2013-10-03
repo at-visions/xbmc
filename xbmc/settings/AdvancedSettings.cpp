@@ -265,7 +265,7 @@ void CAdvancedSettings::Initialize()
   m_splashImage = true;
 
   m_playlistRetries = 100;
-  m_playlistTimeout = 20; // 20 seconds timeout
+  m_playlistTimeout = 7; // 7 seconds timeout modified by ATV
   m_GLRectangleHack = false;
   m_iSkipLoopFilter = 0;
   m_AllowD3D9Ex = true;
