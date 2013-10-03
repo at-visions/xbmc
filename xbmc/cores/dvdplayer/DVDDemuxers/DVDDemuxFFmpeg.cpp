@@ -656,7 +656,7 @@ DemuxPacket* CDVDDemuxFFmpeg::Read()
     pkt.stream_index = MAX_STREAMS;
 
     // timeout reads after 100ms
-    m_timeout.Set(20000);
+    m_timeout.Set(7000);
     int result = m_dllAvFormat.av_read_frame(m_pFormatContext, &pkt);
     m_timeout.SetInfinite();
 
