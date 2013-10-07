@@ -652,6 +652,7 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
     if (!headers.empty())
       m_dllAvUtil.av_dict_set(&options, "headers", headers.c_str(), 0);
   }
+  /*
   else if (protocol.Equals("udp"))
   {
     std::map<CStdString, CStdString> protocolOptions;
@@ -693,7 +694,7 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
     m_dllAvUtil.av_dict_set(&options, "fifo_size",   fifo_size.c_str(), 0);
     m_dllAvUtil.av_dict_set(&options, "buffer_size", buffer_size.c_str(), 0);
   }
-
+  */
   return options;
 }
 
