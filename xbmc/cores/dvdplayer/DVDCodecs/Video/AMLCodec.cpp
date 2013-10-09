@@ -1302,7 +1302,7 @@ CAMLCodec::~CAMLCodec()
 bool CAMLCodec::OpenDecoder(CDVDStreamInfo &hints)
 {
   //wait to create a timegap before next open
-  usleep(50 * 1000);
+  usleep(200 * 1000);
 
   CLog::Log(LOGDEBUG, "CAMLCodec::OpenDecoder");
 
