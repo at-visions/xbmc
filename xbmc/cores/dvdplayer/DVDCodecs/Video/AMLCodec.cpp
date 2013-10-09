@@ -1301,7 +1301,11 @@ CAMLCodec::~CAMLCodec()
 
 bool CAMLCodec::OpenDecoder(CDVDStreamInfo &hints)
 {
+  //wait to create a timegap before next open
+  usleep(50 * 1000);
+
   CLog::Log(LOGDEBUG, "CAMLCodec::OpenDecoder");
+
   m_speed = DVD_PLAYSPEED_NORMAL;
   m_1st_pts = 0;
   m_cur_pts = 0;
@@ -1548,8 +1552,6 @@ void CAMLCodec::CloseDecoder()
   aml_set_sysfs_int("/sys/class/tsync/enable", 1);
 
   ShowMainVideo(false);
-  //wait to create a timegap before next open
-  usleep(50 * 1000);
 }
 
 void CAMLCodec::Reset()
