@@ -1525,7 +1525,6 @@ bool CAMLCodec::OpenDecoder(CDVDStreamInfo &hints)
 
 void CAMLCodec::CloseDecoder()
 {
-  usleep(50 * 1000);
   CLog::Log(LOGDEBUG, "CAMLCodec::CloseDecoder");
   StopThread();
 
@@ -1549,6 +1548,8 @@ void CAMLCodec::CloseDecoder()
   aml_set_sysfs_int("/sys/class/tsync/enable", 1);
 
   ShowMainVideo(false);
+  //wait to create a timegap before next open
+  usleep(50 * 1000);
 }
 
 void CAMLCodec::Reset()
