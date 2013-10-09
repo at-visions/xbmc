@@ -1525,7 +1525,7 @@ bool CAMLCodec::OpenDecoder(CDVDStreamInfo &hints)
 
 void CAMLCodec::CloseDecoder()
 {
-  ::Sleep(50);
+  usleep(50 * 1000);
   CLog::Log(LOGDEBUG, "CAMLCodec::CloseDecoder");
   StopThread();
 
