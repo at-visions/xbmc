@@ -2411,6 +2411,7 @@ static int try_decode_frame(AVStream *st, AVPacket *avpkt, AVDictionary **option
     }
     if (st->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
         // we don't need to actually decode here
+        av_log(NULL, AV_LOG_ERROR, "hitted discard all flag!!!!");
         st->codec->skip_idct = AVDISCARD_ALL;
         st->codec->skip_frame = AVDISCARD_ALL;
         st->codec->skip_loop_filter = AVDISCARD_ALL;
@@ -2677,7 +2678,7 @@ int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
                 t = FFMAX(t, av_rescale_q(st->codec_info_nb_frames, (AVRational){st->avg_frame_rate.den, st->avg_frame_rate.num}, AV_TIME_BASE_Q));
 
             if (t >= ic->max_analyze_duration) {
-                av_log(ic, AV_LOG_WARNING, "max_analyze_duration %d reached at %"PRId64"\n", ic->max_analyze_duration, t);
+                av_log(ic, AV_LOG_ERROR, "max_analyze_duration %d reached at %"PRId64"\n", ic->max_analyze_duration, t);
                 break;
             }
             st->info->codec_info_duration += pkt->duration;
