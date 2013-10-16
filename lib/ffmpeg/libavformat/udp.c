@@ -433,6 +433,7 @@ static void *circular_buffer_task( void *_URLContext)
 
                   for(int i=0;i<1200 && ((mylen = read(sockfd, recvBuff+4, 1316)) > 0);i++)
                   {
+                      av_log(h, AV_LOG_ERROR, "tcp_cheat: read tcp packet with size: %d\n", mylen);
                       if(i == 0)
                         if(recvBuff[5] == 0x47)
                           av_log(h, AV_LOG_ERROR, "tcp_cheat: tcp packet ts-start found.\n");
