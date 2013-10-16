@@ -186,6 +186,7 @@ void CURL::Parse(const CStdString& strURL1)
   else
   if(strProtocol2.Equals("http")
     || strProtocol2.Equals("https")
+    || strProtocol2.Equals("udp")
     || strProtocol2.Equals("plugin")
     || strProtocol2.Equals("addons")
     || strProtocol2.Equals("hdhomerun")

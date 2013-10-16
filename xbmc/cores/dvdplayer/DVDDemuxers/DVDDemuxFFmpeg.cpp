@@ -700,10 +700,12 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
       }
       else if (name.Equals("pb_ip"))
       {
+        // Set IP of Prebuffer Stream
         pb_ip = value;
       }
       else if (name.Equals("pb_port"))
       {
+        // Set Port of Prebuffer Stream
         pb_port = value;
       }
     }
@@ -711,8 +713,8 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
     m_dllAvUtil.av_dict_set(&options, "pkt_size",    pkt_size.c_str(), 0);
     m_dllAvUtil.av_dict_set(&options, "fifo_size",   fifo_size.c_str(), 0);
     m_dllAvUtil.av_dict_set(&options, "buffer_size", buffer_size.c_str(), 0);
-    m_dllAvUtil.av_dict_set(&options, "pb_ip", pb_ip.c_str(), 0);
-    m_dllAvUtil.av_dict_set(&options, "pb_port", pb_port.c_str(), 0);
+    m_dllAvUtil.av_dict_set(&options, "pb_ip",       pb_ip.c_str(), 0);
+    m_dllAvUtil.av_dict_set(&options, "pb_port",     pb_port.c_str(), 0);
   }
 
   return options;
