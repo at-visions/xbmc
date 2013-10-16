@@ -668,6 +668,9 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
     CStdString pkt_size = "1472";       // default is 1472
     CStdString fifo_size = "28672";     // default is 7*4096 (28672)
     CStdString buffer_size = "65536";  // default is 65536
+    CStdString pb_ip = "";
+    CStdString pb_port = "0";
+
     for(std::map<CStdString, CStdString>::const_iterator it = protocolOptions.begin(); it != protocolOptions.end(); ++it)
     {
       const CStdString &name = it->first;
@@ -695,11 +698,21 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
         // Set the UDP socket buffer size in bytes
         buffer_size = value;
       }
+      else if (name.Equals("pb_ip"))
+      {
+        pb_ip = value;
+      }
+      else if (name.Equals("pb_port"))
+      {
+        pb_port = value;
+      }
     }
 
     m_dllAvUtil.av_dict_set(&options, "pkt_size",    pkt_size.c_str(), 0);
     m_dllAvUtil.av_dict_set(&options, "fifo_size",   fifo_size.c_str(), 0);
     m_dllAvUtil.av_dict_set(&options, "buffer_size", buffer_size.c_str(), 0);
+    m_dllAvUtil.av_dict_set(&options, "pb_ip", pb_ip.c_str(), 0);
+    m_dllAvUtil.av_dict_set(&options, "pb_port", pb_port.c_str(), 0);
   }
 
   return options;
