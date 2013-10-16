@@ -431,13 +431,13 @@ static void *circular_buffer_task( void *_URLContext)
                   int mylen = 0;
                   av_log(h, AV_LOG_ERROR, "tcp_cheat: start reading...\n");
 
-                  for(int i=0;i<600 && ((mylen = read(sockfd, recvBuff+4, 1316)) > 0);i++)
+                  for(int i=0;i<1200 && ((mylen = read(sockfd, recvBuff+4, 1316)) > 0);i++)
                   {
                       if(i == 0)
                         if(recvBuff[5] == 0x47)
-                          av_log(h, AV_LOG_ERROR, "tcp cheat: tcp packet ts-start found.\n");
+                          av_log(h, AV_LOG_ERROR, "tcp_cheat: tcp packet ts-start found.\n");
                         else
-                          av_log(h, AV_LOG_ERROR, "tcp cheat: tcp packet ts-start not found.\n");
+                          av_log(h, AV_LOG_ERROR, "tcp_cheat: tcp packet ts-start not found.\n");
 
                       AV_WL32(recvBuff, mylen);
                       pthread_mutex_lock(&s->mutex);
@@ -447,7 +447,7 @@ static void *circular_buffer_task( void *_URLContext)
 
                       if (!memcmp(&udp_ref, recvBuff+4, sizeof(udplen)))
                       {
-                        av_log(h, AV_LOG_ERROR, "tcp cheat: matches udp ref.\n");
+                        av_log(h, AV_LOG_ERROR, "tcp_cheat: matches udp ref.\n");
                         break;
                       }
                   }
