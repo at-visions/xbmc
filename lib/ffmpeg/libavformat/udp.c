@@ -427,7 +427,7 @@ static void *circular_buffer_task( void *_URLContext)
                   int mylen = 0;
                   av_log(h, AV_LOG_ERROR, "tcp cheat start reading...\n");
 
-                  for(int i=0;i<1200 && ((mylen = read(sockfd, recvBuff+4, sizeof(recvBuff)-4)) > 0);i++)
+                  for(int i=0;i<2400 && ((mylen = read(sockfd, recvBuff+4, sizeof(recvBuff)-4)) > 0);i++)
                   {
                       AV_WL32(recvBuff, mylen);
                       pthread_mutex_lock(&s->mutex);
@@ -436,7 +436,10 @@ static void *circular_buffer_task( void *_URLContext)
                       pthread_mutex_unlock(&s->mutex);
 
                       if (!memcmp(&udp_ref, recvBuff+4, sizeof(udplen)))
+                      {
+                        av_log(h, AV_LOG_ERROR, "tcp matches udp ref.\n");
                         break;
+                      }
                   }
                 }
                 av_log(h, AV_LOG_ERROR, "tcp cheat stop reading...\n");
