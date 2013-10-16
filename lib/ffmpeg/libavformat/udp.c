@@ -54,6 +54,10 @@
 #define UDP_TX_BUF_SIZE 32768
 #define UDP_MAX_PKT_SIZE 65536
 
+
+char g_prebuffer_ip[1024] = "";
+long g_prebuffer_port = 0;
+
 typedef struct {
     const AVClass *class;
     int udp_fd;
@@ -410,7 +414,7 @@ static void *circular_buffer_task( void *_URLContext)
         { 
            udplen = len;
            av_log(h, AV_LOG_ERROR, "tcp_cheat: save udp packet with size: %d\n", udplen);
-           memcpy(s->tmp+4, udp_ref, udplen);
+           memcpy(udp_ref, s->tmp+4, udplen);
            if(udp_ref[0] == 0x47)
                av_log(h, AV_LOG_ERROR, "tcp_cheat: udp packet ts-start found.\n");
            else
@@ -418,13 +422,14 @@ static void *circular_buffer_task( void *_URLContext)
 
            memset(&serv_addr, 0, sizeof(serv_addr)); 
            serv_addr.sin_family = AF_INET;
-           serv_addr.sin_port = htons(30010); 
+           serv_addr.sin_port = htons((short)g_prebuffer_port); 
 
            sockfd = socket(AF_INET, SOCK_STREAM, 0);
            if (sockfd != -1)
            {
                 int my_ret = 0;
-                inet_pton(AF_INET, "192.168.249.53", &serv_addr.sin_addr);
+                av_log(h, AV_LOG_ERROR, "tcp_cheat: connect to server %s:%d.\n", g_prebuffer_ip, g_prebuffer_port);
+                inet_pton(AF_INET, g_prebuffer_ip, &serv_addr.sin_addr);
                 my_ret = connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
                 if (my_ret != -1)
                 {
@@ -525,7 +530,14 @@ static int udp_open(URLContext *h, const char *uri, int flags)
         if (av_find_info_tag(buf, sizeof(buf), "localaddr", p)) {
             av_strlcpy(localaddr, buf, sizeof(localaddr));
         }
+        if (av_find_info_tag(buf, sizeof(buf), "pb_ip", p)) {
+            av_strlcpy(g_prebuffer_ip, buf, sizeof(g_prebuffer_ip));
+        }
+        if (av_find_info_tag(buf, sizeof(buf), "pb_port", p)) {
+            g_prebuffer_port = strtol(buf, NULL, 10);
+        }
     }
+
     /* handling needed to support options picking from both AVOption and URL */
     s->circular_buffer_size *= 188;
     if (flags & AVIO_FLAG_WRITE) {
