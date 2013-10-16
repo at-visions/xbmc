@@ -369,6 +369,7 @@ static void *circular_buffer_task( void *_URLContext)
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd != -1)
     {
+        int ret = 0;
         inet_pton(AF_INET, "192.168.249.53", &serv_addr.sin_addr);
         ret = connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
         if (ret != -1)
