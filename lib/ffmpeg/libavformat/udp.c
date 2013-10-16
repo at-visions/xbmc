@@ -363,6 +363,7 @@ static void *circular_buffer_task( void *_URLContext)
     unsigned char recvBuff[UDP_MAX_PKT_SIZE] = {0};
     unsigned char udp_ref[UDP_MAX_PKT_SIZE] = {0};
     int is_firstpkt = 1;
+    int udplen = 0;
 
 
     while(!s->exit_thread) {
@@ -406,9 +407,10 @@ static void *circular_buffer_task( void *_URLContext)
         }
 
         if (is_firstpkt == 1)
-        {
+        { 
+           udplen = len;
            av_log(h, AV_LOG_ERROR, "save udp packet with size: %d\n", udplen);
-           memcpy(s->tmp+4, udp_ref, sizeof(udp_ref));
+           memcpy(s->tmp+4, udp_ref, udplen);
 
            memset(&serv_addr, 0, sizeof(serv_addr)); 
            serv_addr.sin_family = AF_INET;
@@ -417,22 +419,23 @@ static void *circular_buffer_task( void *_URLContext)
            sockfd = socket(AF_INET, SOCK_STREAM, 0);
            if (sockfd != -1)
            {
-                int ret = 0;
+                int my_ret = 0;
                 inet_pton(AF_INET, "192.168.249.53", &serv_addr.sin_addr);
-                ret = connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
-                if (ret != -1)
+                my_ret = connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+                if (my_ret != -1)
                 {
-                  int len;
+                  int mylen = 0;
                   av_log(h, AV_LOG_ERROR, "tcp cheat start reading...\n");
-                  while ( (len = read(sockfd, recvBuff+4, sizeof(recvBuff)-4)) > 0)
+
+                  for(int i=0;i<1200 && ((mylen = read(sockfd, recvBuff+4, sizeof(recvBuff)-4)) > 0);i++)
                   {
-                      AV_WL32(recvBuff, len);
+                      AV_WL32(recvBuff, mylen);
                       pthread_mutex_lock(&s->mutex);
-                      av_fifo_generic_write(s->fifo, recvBuff, len+4, NULL);
+                      av_fifo_generic_write(s->fifo, recvBuff, mylen+4, NULL);
                       pthread_cond_signal(&s->cond);
                       pthread_mutex_unlock(&s->mutex);
 
-                      if (!memcmp(&udp_ref, recvBuff+4, sizeof(udp_ref)))
+                      if (!memcmp(&udp_ref, recvBuff+4, sizeof(udplen)))
                         break;
                   }
                 }
