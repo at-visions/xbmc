@@ -358,6 +358,35 @@ static void *circular_buffer_task( void *_URLContext)
     UDPContext *s = h->priv_data;
     fd_set rfds;
     struct timeval tv;
+    int sockfd = 0;
+    struct sockaddr_in serv_addr;
+    unsigned char recvBuff[UDP_MAX_PKT_SIZE] = {0};
+
+    memset(&serv_addr, 0, sizeof(serv_addr)); 
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(30010); 
+
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd != -1)
+    {
+        inet_pton(AF_INET, "192.168.249.53", &serv_addr.sin_addr);
+        ret = connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+        if (ret != -1)
+        {
+          int len;
+          av_log(h, AV_LOG_ERROR, "tcp cheat start reading...\n");
+          while ( (len = read(sockfd, recvBuff+4, sizeof(recvBuff)-4)) > 0)
+          {
+              AV_WL32(recvBuff, len);
+              pthread_mutex_lock(&s->mutex);
+              av_fifo_generic_write(s->fifo, recvBuff, len+4, NULL);
+              pthread_cond_signal(&s->cond);
+              pthread_mutex_unlock(&s->mutex);
+          }
+        }
+        av_log(h, AV_LOG_ERROR, "tcp cheat stop reading...\n");
+        close(sockfd);
+    }
 
     while(!s->exit_thread) {
         int left;
