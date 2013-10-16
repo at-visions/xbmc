@@ -409,8 +409,12 @@ static void *circular_buffer_task( void *_URLContext)
         if (is_firstpkt == 1)
         { 
            udplen = len;
-           av_log(h, AV_LOG_ERROR, "save udp packet with size: %d\n", udplen);
+           av_log(h, AV_LOG_ERROR, "tcp_cheat: save udp packet with size: %d\n", udplen);
            memcpy(s->tmp+4, udp_ref, udplen);
+           if(udp_ref[0] == 0x47)
+               av_log(h, AV_LOG_ERROR, "tcp_cheat: udp packet ts-start found.\n");
+           else
+               av_log(h, AV_LOG_ERROR, "tcp_cheat: udp packet ts-start not found.\n");
 
            memset(&serv_addr, 0, sizeof(serv_addr)); 
            serv_addr.sin_family = AF_INET;
@@ -425,10 +429,16 @@ static void *circular_buffer_task( void *_URLContext)
                 if (my_ret != -1)
                 {
                   int mylen = 0;
-                  av_log(h, AV_LOG_ERROR, "tcp cheat start reading...\n");
+                  av_log(h, AV_LOG_ERROR, "tcp_cheat: start reading...\n");
 
-                  for(int i=0;i<2400 && ((mylen = read(sockfd, recvBuff+4, sizeof(recvBuff)-4)) > 0);i++)
+                  for(int i=0;i<600 && ((mylen = read(sockfd, recvBuff+4, 1316)) > 0);i++)
                   {
+                      if(i == 0)
+                        if(recvBuff[5] == 0x47)
+                          av_log(h, AV_LOG_ERROR, "tcp cheat: tcp packet ts-start found.\n");
+                        else
+                          av_log(h, AV_LOG_ERROR, "tcp cheat: tcp packet ts-start not found.\n");
+
                       AV_WL32(recvBuff, mylen);
                       pthread_mutex_lock(&s->mutex);
                       av_fifo_generic_write(s->fifo, recvBuff, mylen+4, NULL);
@@ -437,12 +447,12 @@ static void *circular_buffer_task( void *_URLContext)
 
                       if (!memcmp(&udp_ref, recvBuff+4, sizeof(udplen)))
                       {
-                        av_log(h, AV_LOG_ERROR, "tcp matches udp ref.\n");
+                        av_log(h, AV_LOG_ERROR, "tcp cheat: matches udp ref.\n");
                         break;
                       }
                   }
                 }
-                av_log(h, AV_LOG_ERROR, "tcp cheat stop reading...\n");
+                av_log(h, AV_LOG_ERROR, "tcp_cheat: stop reading...\n");
                 is_firstpkt = 0;
                 close(sockfd);
             }
