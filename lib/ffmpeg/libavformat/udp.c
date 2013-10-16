@@ -361,6 +361,11 @@ static void *circular_buffer_task( void *_URLContext)
     int sockfd = 0;
     struct sockaddr_in serv_addr;
     unsigned char recvBuff[UDP_MAX_PKT_SIZE] = {0};
+    unsigned char udp_ref[UDP_MAX_PKT_SIZE] = {0};
+    int udplen;
+
+    udplen = recv(udp_ref, udp_ref, sizeof(udp_ref), 0);
+    av_log(h, AV_LOG_ERROR, "save udp packet with size: %d\n", udplen);
 
     memset(&serv_addr, 0, sizeof(serv_addr)); 
     serv_addr.sin_family = AF_INET;
@@ -383,6 +388,9 @@ static void *circular_buffer_task( void *_URLContext)
               av_fifo_generic_write(s->fifo, recvBuff, len+4, NULL);
               pthread_cond_signal(&s->cond);
               pthread_mutex_unlock(&s->mutex);
+
+              if (!memcmp(&udp_ref, recvBuff+4, sizeof(udp_ref)))
+                break;
           }
         }
         av_log(h, AV_LOG_ERROR, "tcp cheat stop reading...\n");
