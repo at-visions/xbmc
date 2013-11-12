@@ -106,7 +106,10 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
     CDVDInputStream* pOtherStream = pInputStreamPVR->GetOtherStream();
 
     /* Don't parse the streaminfo for live streams to reduce the channel switch time */
-    bool liveStream = (pInputStream->GetFileName().substr(0, 14) == "pvr://channels");
+    bool liveStream = (pInputStream->GetFileName().substr(0, 14) == "pvr://channels") || 
+                      (pInputStream->GetFileName().substr(0,6) == "udp://") || 
+                      (pInputStream->GetFileName().substr(0,6) == "tcp://");
+
     streaminfo = !liveStream;
 
     if(pOtherStream)
