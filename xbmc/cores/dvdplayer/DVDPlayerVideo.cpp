@@ -684,7 +684,10 @@ void CDVDPlayerVideo::Process()
             if (picture.iRepeatPicture)
               picture.iDuration *= picture.iRepeatPicture + 1;
 
-            int iResult = OutputPicture(&picture, pts);
+            int iResult = 0;
+            //do not render frames with negativ pts
+            if (pts > 0)
+              iResult = OutputPicture(&picture, pts);
 
             if(m_started == false)
             {
