@@ -109,12 +109,12 @@ public:
     ::avcodec_register_all();
   }
   virtual void avcodec_flush_buffers(AVCodecContext *avctx) { ::avcodec_flush_buffers(avctx); }
-  virtual int avcodec_open2(AVCodecContext *avctx, AVCodec *codec, AVDictionary **options)
+  virtual int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options)
   {
     CSingleLock lock(DllAvCodec::m_critSection);
     return ::avcodec_open2(avctx, codec, options);
   }
-  virtual int avcodec_open2_dont_call(AVCodecContext *avctx, AVCodec *codec, AVDictionary **options) { *(volatile int *)0x0 = 0; return 0; }
+  virtual int avcodec_open2_dont_call(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options) { *(volatile int *)0x0 = 0; return 0; }
   virtual int avcodec_close_dont_call(AVCodecContext *avctx) { *(volatile int *)0x0 = 0; return 0; }
   virtual AVCodec *avcodec_find_decoder(enum AVCodecID id) { return ::avcodec_find_decoder(id); }
   virtual AVCodec *avcodec_find_encoder(enum AVCodecID id) { return ::avcodec_find_encoder(id); }
