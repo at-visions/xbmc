@@ -99,21 +99,19 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
   }
 #endif
 
-  bool streaminfo = true; /* Look for streams before playback */
   if (pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER))
   {
     CDVDInputStreamPVRManager* pInputStreamPVR = (CDVDInputStreamPVRManager*)pInputStream;
     CDVDInputStream* pOtherStream = pInputStreamPVR->GetOtherStream();
-
-    /* Don't parse the streaminfo for some cases of streams to reduce the channel switch time */
-    bool liveStream = URIUtils::IsPVRChannel(pInputStream->GetFileName());
-    streaminfo = URIUtils::IsUsingFastSwitch(pInputStream->GetFileName());
 
     if(pOtherStream)
     {
       /* Used for MediaPortal PVR addon (uses PVR otherstream for playback of rtsp streams) */
       if (pOtherStream->IsStreamType(DVDSTREAM_TYPE_FFMPEG))
       {
+        /* Don't parse the streaminfo for some cases of streams to reduce the channel switch time */
+        bool streaminfo = URIUtils::IsUsingFastSwitch(pInputStream->GetFileName());
+
         auto_ptr<CDVDDemuxFFmpeg> demuxer(new CDVDDemuxFFmpeg());
         if(demuxer->Open(pOtherStream, streaminfo))
           return demuxer.release();
@@ -122,9 +120,8 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
       }
     }
 
-    std::string filename = pInputStream->GetFileName();
     /* Use PVR demuxer only for live streams */
-    if (liveStream)
+    if (URIUtils::IsPVRChannel(pInputStream->GetFileName()))
     {
       boost::shared_ptr<CPVRClient> client;
       if (g_PVRClients->GetPlayingClient(client) &&
@@ -140,7 +137,7 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
   }
 
   auto_ptr<CDVDDemuxFFmpeg> demuxer(new CDVDDemuxFFmpeg());
-  if(demuxer->Open(pInputStream, streaminfo))
+  if(demuxer->Open(pInputStream))
     return demuxer.release();
   else
     return NULL;
