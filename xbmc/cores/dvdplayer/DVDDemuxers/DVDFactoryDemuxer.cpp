@@ -105,9 +105,9 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
     CDVDInputStreamPVRManager* pInputStreamPVR = (CDVDInputStreamPVRManager*)pInputStream;
     CDVDInputStream* pOtherStream = pInputStreamPVR->GetOtherStream();
 
-    /* Don't parse the streaminfo for live streams to reduce the channel switch time */
-    bool liveStream = (pInputStream->GetFileName().substr(0, 14) == "pvr://channels");
-    streaminfo = !liveStream;
+    /* Don't parse the streaminfo for some cases of streams to reduce the channel switch time */
+    bool liveStream = URIUtils::IsPVRChannel(pInputStream->GetFileName());
+    streaminfo = URIUtils::IsUsingFastSwitch(pInputStream->GetFileName());
 
     if(pOtherStream)
     {
