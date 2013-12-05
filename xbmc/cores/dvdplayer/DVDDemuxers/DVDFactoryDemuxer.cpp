@@ -99,6 +99,7 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
   }
 #endif
 
+  bool streaminfo = true;
   if (pInputStream->IsStreamType(DVDSTREAM_TYPE_PVRMANAGER))
   {
     CDVDInputStreamPVRManager* pInputStreamPVR = (CDVDInputStreamPVRManager*)pInputStream;
@@ -110,7 +111,8 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
       if (pOtherStream->IsStreamType(DVDSTREAM_TYPE_FFMPEG))
       {
         /* Don't parse the streaminfo for some cases of streams to reduce the channel switch time */
-        bool streaminfo = URIUtils::IsUsingFastSwitch(pInputStream->GetFileName());
+        bool liveStream = URIUtils::IsPVRChannel(pInputStream->GetFileName());
+        streaminfo = !liveStream;
 
         auto_ptr<CDVDDemuxFFmpeg> demuxer(new CDVDDemuxFFmpeg());
         if(demuxer->Open(pOtherStream, streaminfo))
@@ -136,8 +138,14 @@ CDVDDemux* CDVDFactoryDemuxer::CreateDemuxer(CDVDInputStream* pInputStream)
     }
   }
 
+  if (pInputStream->IsStreamType(DVDSTREAM_TYPE_FFMPEG))
+  {
+    bool useFastswitch = URIUtils::IsUsingFastSwitch(pInputStream->GetFileName());
+    streaminfo = !useFastswitch;
+  }
+
   auto_ptr<CDVDDemuxFFmpeg> demuxer(new CDVDDemuxFFmpeg());
-  if(demuxer->Open(pInputStream))
+  if(demuxer->Open(pInputStream, streaminfo))
     return demuxer.release();
   else
     return NULL;
