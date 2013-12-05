@@ -452,7 +452,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput, bool streaminfo)
   bool short_analyze = false;
   if (iformat && (strcmp(iformat->name, "mpegts") == 0))
   {
-    m_pFormatContext->max_analyze_duration = 500000;
+    m_pFormatContext->max_analyze_duration = 50000;
     short_analyze = true;
   }
 
