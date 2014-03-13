@@ -2,8 +2,8 @@
 
 BUILD=${1:-"all"}
 THREADS=32
-REL="./configure --prefix=/opt --enable-libusb --enable-vdpau --enable-vaapi --disable-joystick --disable-pulse --enable-airtunes --enable-airplay CXXFLAGS=-DTIXML_USE_STL --disable-debug"
-DBG="./configure --prefix=/opt --enable-libusb --enable-vdpau --enable-vaapi --disable-joystick --disable-pulse --enable-airtunes --enable-airplay CXXFLAGS=-DTIXML_USE_STL"
+REL="./configure --prefix=/opt --enable-libusb --enable-vdpau --enable-vaapi --disable-joystick --disable-pulse --enable-airtunes --enable-airplay CXXFLAGS=-DTIXML_USE_STL --disable-debug --disable-hal --enable-udev"
+DBG="./configure --prefix=/opt --enable-libusb --enable-vdpau --enable-vaapi --disable-joystick --disable-pulse --enable-airtunes --enable-airplay CXXFLAGS=-DTIXML_USE_STL --disable-hal --enable-udev"
 declare -x PATH="/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/lib/java/bin"
 GITREV=`git describe --tags`
 
