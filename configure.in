@@ -2192,6 +2192,7 @@ if test "$host_vendor" = "apple"; then
   echo "#define GIT_REV \"$GIT_REV\"" > git_revision.h
 else
   SDL_DEFINES="$SDL_DEFINES -D'GIT_REV=\"$GIT_REV\"'"
+fi
 
 if test "$use_mdnsembedded" != "no"; then
   final_message="$final_message\n  mDNSEmbedded:\tYes"
