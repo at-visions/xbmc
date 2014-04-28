@@ -27,10 +27,10 @@ function cfgbuild
 {
   if [ $1 == "release" ]; then
     CFG=$REL
-    OUTPUT="200gz-xbmc-xvba-$GITREV.lzm"
+    OUTPUT="200gz-xbmc-$GITREV.lzm"
   elif [ $1 == "debug" ]; then
     CFG=$DBG
-    OUTPUT="200gz-xbmc-xvba-$GITREV-debug.lzm"
+    OUTPUT="200gz-xbmc-$GITREV-debug.lzm"
   else
     echo "Unkown build - exit"
     exit 1
