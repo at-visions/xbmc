@@ -1221,7 +1221,9 @@ void CMixer::StateMachine(int signal, Protocol *port, Message *msg)
           {
             m_config = *data;
           }
+
           Init();
+
           if (!m_vdpError)
           {
             m_state = M_TOP_CONFIGURED_WAIT1;
@@ -2422,7 +2424,10 @@ void COutput::StateMachine(int signal, Protocol *port, Message *msg)
           {
             m_config = *data;
           }
-          Init();
+
+          if (Init() == false)
+            CLog::Log(LOGWARNING, "%s - Init returned false!!!", __FUNCTION__);
+
           Message *reply;
           if (m_mixer.m_controlPort.SendOutMessageSync(CMixerControlProtocol::INIT,
                                      &reply, 1000, &m_config, sizeof(m_config)))
