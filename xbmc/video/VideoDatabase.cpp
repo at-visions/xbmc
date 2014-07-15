@@ -8175,35 +8175,6 @@ std::vector<int> CVideoDatabase::CleanMediaType(const std::string &mediaType, co
     bool del = true;
     if (parentPathsDeleteDecision == parentPathsDeleteDecisions.end())
     {
-      std::string parentPath = m_pDS->fv(4).get_asString();
-      bool parentPathNotExists = !CDirectory::Exists(parentPath, false);
-      // if the parent path exists, the file will be deleted without asking
-      // if the parent path doesn't exist, ask the user whether to remove all items it contained
-      if (parentPathNotExists)
-      {
-        // in silent mode assume that the files are just temporarily missing
-        if (silent)
-          del = false;
-        else
-        {
-          CGUIDialogYesNo* pDialog = (CGUIDialogYesNo*)g_windowManager.GetWindow(WINDOW_DIALOG_YES_NO);
-          if (pDialog != NULL)
-          {
-            CURL parentUrl(parentPath);
-            pDialog->SetHeading(15012);
-            pDialog->SetText(StringUtils::Format(g_localizeStrings.Get(15013), parentUrl.GetWithoutUserDetails().c_str()));
-            pDialog->SetChoice(0, 15015);
-            pDialog->SetChoice(1, 15014);
-
-            //send message and wait for user input
-            ThreadMessage tMsg = { TMSG_DIALOG_DOMODAL, WINDOW_DIALOG_YES_NO, (unsigned int)g_windowManager.GetActiveWindow() };
-            CApplicationMessenger::Get().SendMessage(tMsg, true);
-
-            del = !pDialog->IsConfirmed();
-          }
-        }
-      }
-
       parentPathsDeleteDecisions.insert(make_pair(parentPathID, make_pair(parentPathNotExists, del)));
     }
     // the only reason not to delete the file is if the parent path doesn't
